@@ -1,5 +1,6 @@
 #include<vector>
 #include<string>
+#include<stdio.h>
 
 #define STRVEC std::vector<std::string>
 #define STR std::string
@@ -43,6 +44,75 @@ STRVEC KillerOfFuckingNullStrings(STRVEC vec)
 
     return ret;
 }
+
+//This function is not tested, and I do not know how well it works. And I know, it's awful
+STR OneInstTranslate(STRVEC tokens)
+{
+    STR ret = "";
+    bool InstF = false;
+    for(int i = 0; i < std::size(tokens); i++)
+        {
+            if (!InstF)
+            {
+                InstF = true;
+                switch(tokens[0])
+                    {
+                        //Default functions
+                        case "print":
+                            ret += "std::cout << ";
+                            break;
+                        case "input":
+                            ret += "std::cin >> ";
+                            break;
+                        //Data types
+                        case "int":
+                            ret += "int ";
+                            break;
+                        case "double":
+                            ret += "double";
+                            continue;
+                            break;
+                        default:
+                            printf("Unknown function!");
+                            i = std::size(tokens);
+                            break;
+                    }
+                i++;
+            }
+            switch(tokens[i])
+                {
+                    case "STR":
+                        ret += "\"" + tokens[i + 1] + "\"";
+                        break;
+                    case "ARGS":
+                        i++;
+                        break;
+                    case "ARGe":
+                        i = std::size(tokens);
+                        break;
+                    case "STRe":
+                        re
+                }
+        }
+}
+STRVEC TranslateToC(STRVEC tokens)
+{
+    STRVEC ret;
+
+    for (long long i = 0; i < std::size(tokens); i++)
+        {
+            switch (tokens[i])
+                {
+                    case "print":
+                        STRVEC tempArgs;
+                        STR line = "";
+
+                        
+                        
+                }
+        }
+}
+
 
 STRVEC Tokenize(STRVEC code)
 {
