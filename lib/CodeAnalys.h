@@ -49,61 +49,97 @@ STRVEC KillerOfFuckingNullStrings(STRVEC vec)
 STR OneInstTranslate(STRVEC tokens)
 {
     STR ret = "";
-
-    switch(tokens[0])
-    {
+    for (int i = 0; i < std::size(tokens); i++) {
         //Default functions
-        case "print":
-            ret += "std::cout << ";
-            for (int i = 1; i < std::size(tokens); i++)
-                {
-                    switch (tokens[i])
-                        {
-                            case "STR":
-                                ret += "\"";
-                                break;
-                            case "STRe":
-                                ret += "\"";
-                                break;
-                            case "AND":
-                                ret += "<<";
-                                break;
-                            default:
-                                ret += tokens[i];
-                                break;
-                        }
+        if (tokens[i] == "print") {
+            ret += "std::cout ";
+            for (int j = i + 1; j < std::size(tokens); j++) {
+                if (tokens[j] == "STR") {
+                    ret += "\"";
+
                 }
-            ret += ";";
-            break;
-        case "input":
-            ret += "std::cin >> ";
-            for (int i = 1; i < std::size(tokens); i++)
-                {
-                    switch(tokens[i])
-                        {
-                            case "AND":
-                                ret += ">>";
-                                break;
-                            default:
-                                ret += tokens[i];
-                                break;
-                        }
+                else if (tokens[j] == "STRe") {
+                    ret += "\"";
+
                 }
-            ret += ";";
-            break;
-            //Data types
-            case "int":
-                ret += "int ";
-                
-                break;
-            case "double":
-                ret += "double";
-                break;
-            default:
-                printf("Unknown function!");
-                i = std::size(tokens);
-                break;
+                else if (tokens[j] == "AND" || tokens[j] == "ARGS") {
+                    ret += "<<";
+
+                }
+                else if (tokens[j] == "ARGe")
+                {
+                    ret += ";\n";
+                    i += j - i;
+                    break;
+
+                }
+                else if (tokens[j] == "EQU")
+                {
+                    continue;
+                }
+                else {
+                    ret += tokens[j] + ' ';
+                }
+            }
         }
+        else if (tokens[i] == "input") {
+            ret += "std::cin ";
+            for (int j = i + 1; j < std::size(tokens) ; j++)
+            {
+                if (tokens[j] == "AND")
+                {
+                    ret += ">> ";
+
+                }
+                else if (tokens[j] == "ARGS")
+                {
+                    ret += ">> ";
+
+                }
+                else if (tokens[j] == "ARGe")
+                {
+                    ret += ";\n";
+                    i += j - i;
+                    break;
+
+                }
+                else {
+                    ret += tokens[j];
+
+                }
+            }
+        }
+        //Data types
+        else if (tokens[i] == "int") {
+            ret += "int ";
+            for (int j = i + 1; j < std::size(tokens); j++)
+            {
+                if (tokens[j] == "EQU")
+                {
+                    ret += "= ";
+                    ret += tokens[j + 1];
+                    if (tokens[j + 2] != "AND")
+                    {
+                        ret += ";\n";
+                        i += (j + 2) - i;
+                    }
+                }
+                else if (tokens[j] == "STR" || tokens[j] == "STRe" || tokens[j] == "ARGS" || tokens[j] == "ARGe")
+                {
+                    continue;
+                }
+                else ret += tokens[j] + ' ';
+            }
+        }
+        else if (tokens[i] == "double") {
+            ret += "double";
+        }
+        else {
+            printf("Unknown function!");
+        }
+    }
+        ret += "\n";
+        return ret;
 }
 STRVEC TranslateToC(STRVEC tokens)
 {
@@ -159,23 +195,28 @@ STRVEC Tokenize(STRVEC code)
                 break;
             case '\"':
                 sep_string.push_back(str);
-                if (!SSF) 
+                if (!SSF)
                 {
                     sep_string.push_back("STR");
                     SSF += 1;
                 }
                 else if (SSF)
-                { 
-                    SSF -= 1; 
+                {
+                    SSF -= 1;
                     sep_string.push_back("STRe");
                 }
                 str = "";
                 break;
-                case "\\"://Comments
-                    sep_string.push_back(str);
-                    str = "";
-                    break;
-            
+            case '\\'://Comments
+                sep_string.push_back(str);
+                str = "";
+                break;
+            case '=':
+                sep_string.push_back(str);
+                sep_string.push_back("EQU");
+                str = "";
+                break;
+
             default:
                 str += c;
                 break;
