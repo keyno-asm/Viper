@@ -4,12 +4,16 @@
 
 int main()
 {
-    STRVEC code = {"print(\"Hello world\")", "input(uInput)", "print(uInput, foo, dog)"};
+    STRVEC code = { "input(art)","print(\"Hello world\")" };
 
     STRVEC uwu = Tokenize(code);
 
-    for (STR line : uwu)
+    STR line = OneInstTranslate(uwu);
+
+    for (int i = 0; i < std::size(uwu); i++)
     {
-        std::cout << line << "\n";
+        std::cout << uwu[i] << std::endl;
     }
+
+    std::cout << line << std::endl;
 }
