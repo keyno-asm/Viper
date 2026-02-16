@@ -49,50 +49,60 @@ STRVEC KillerOfFuckingNullStrings(STRVEC vec)
 STR OneInstTranslate(STRVEC tokens)
 {
     STR ret = "";
-    bool InstF = false;
-    for(int i = 0; i < std::size(tokens); i++)
-        {
-            if (!InstF)
-            {
-                InstF = true;
-                switch(tokens[0])
-                    {
-                        //Default functions
-                        case "print":
-                            ret += "std::cout << ";
-                            break;
-                        case "input":
-                            ret += "std::cin >> ";
-                            break;
-                        //Data types
-                        case "int":
-                            ret += "int ";
-                            break;
-                        case "double":
-                            ret += "double";
-                            continue;
-                            break;
-                        default:
-                            printf("Unknown function!");
-                            i = std::size(tokens);
-                            break;
-                    }
-                i++;
-            }
-            switch(tokens[i])
+
+    switch(tokens[0])
+    {
+        //Default functions
+        case "print":
+            ret += "std::cout << ";
+            for (int i = 1; i < std::size(tokens); i++)
                 {
-                    case "STR":
-                        ret += "\"" + tokens[i + 1] + "\"";
-                        break;
-                    case "ARGS":
-                        i++;
-                        break;
-                    case "ARGe":
-                        i = std::size(tokens);
-                        break;
-                    case "STRe":
-                        re
+                    switch (tokens[i])
+                        {
+                            case "STR":
+                                ret += "\"";
+                                break;
+                            case "STRe":
+                                ret += "\"";
+                                break;
+                            case "AND":
+                                ret += "<<";
+                                break;
+                            default:
+                                ret += tokens[i];
+                                break;
+                        }
                 }
+            ret += ";";
+            break;
+        case "input":
+            ret += "std::cin >> ";
+            for (int i = 1; i < std::size(tokens); i++)
+                {
+                    switch(tokens[i])
+                        {
+                            case "AND":
+                                ret += ">>";
+                                break;
+                            default:
+                                ret += tokens[i];
+                                break;
+                        }
+                }
+            ret += ";";
+            break;
+            //Data types
+            case "int":
+                ret += "int ";
+                
+                break;
+            case "double":
+                ret += "double";
+                break;
+            default:
+                printf("Unknown function!");
+                i = std::size(tokens);
+                break;
         }
 }
 STRVEC TranslateToC(STRVEC tokens)
@@ -161,6 +171,10 @@ STRVEC Tokenize(STRVEC code)
                 }
                 str = "";
                 break;
+                case "\\"://Comments
+                    sep_string.push_back(str);
+                    str = "";
+                    break;
             
             default:
                 str += c;
