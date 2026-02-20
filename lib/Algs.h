@@ -27,7 +27,7 @@ STRVEC Reader(STR path)
     return ret;
 }
 
-STRVEC Writer(STRVEC text, STR path)
+void Writer(STRVEC text, STR path)
 {
     std::ofstream file(path);
 
