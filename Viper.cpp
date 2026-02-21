@@ -4,14 +4,17 @@
 
 int main()
 {
-    STRVEC code = { "double srg = 12 + rt",
+    STRVEC code = { "real srg = 12 + rt",
         "int art = 10",
         "input(art)",
         "print(\"Hello world\" , art)", 
-        "if(art == 10)", 
+        "if(art >= 10)", 
         "{", 
         "print(srg)", 
-        "}"};
+        "}",
+        "else{",
+        "print(fgt)",
+        "}"}  ;
 
     STRVV uwu = Tokens(code);
 

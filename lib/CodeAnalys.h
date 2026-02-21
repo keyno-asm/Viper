@@ -217,6 +217,26 @@ STRVV Tokens(STRVEC code)
                     tmp.push_back("DPC");
                     str = "";
                     break;
+                case '>':
+                    tmp.push_back(str);
+                    tmp.push_back("MORE");
+                    str = "";
+                    break;
+                case '<':
+                    tmp.push_back(str);
+                    tmp.push_back("LESS");
+                    str = "";
+                    break;
+                case '%':
+                    tmp.push_back(str);
+                    tmp.push_back("PERC");
+                    str = "";
+                    break;
+                case '-':
+                    tmp.push_back(str);
+                    tmp.push_back("MINUS");
+                    str = "";
+                    break;
                 default:
                     str += c;
                     break;
@@ -260,7 +280,7 @@ STRVEC TranslateCpp(STRVV tokens)
                 tmp += ";";  
             }
 
-            else if (tline[i] == "double")
+            else if (tline[i] == "real")
             {
                 tmp += "double ";
                 for (int j = i + 1; j < std::size(tline); j++)
@@ -322,7 +342,7 @@ STRVEC TranslateCpp(STRVV tokens)
                 }
                 tmp += ";";
             }
-            /*
+            
             else if (tline[i] == "if")
             {
                 tmp += "if";
@@ -333,8 +353,34 @@ STRVEC TranslateCpp(STRVV tokens)
                         tmp += "(";
 
                     }
+
+                    else if (tline[j] == "EQU"){tmp += "=";}
+                    else if (tline[j] == "MORE"){tmp += ">";}
+                    else if (tline[j] == "LESS"){tmp += "<";}
+                    else if (tline[j] == "PERC"){tmp += "%";}
+                    else if (tline[j] == "PLUS"){tmp += "+";}
+                    else if (tline[j] == "MINUS"){tmp += "-";}
+                    else if (tline[j] == "ARGe"){tmp += ")";}
+                    else {
+                        tmp += tline[j] + ' ';
+                    }
+
+
                 }
-            }*/
+            }
+            else if (tline[i] == "else")
+            {
+                tmp += "else";
+            }
+            else if (tline[i] == "FOP")
+            {
+                tmp += "{";
+            }
+            else if (tline[i] == "FCL")
+            {
+                tmp += "}";
+            }
+            
         }
         ret.push_back(tmp);
         tmp = "";
